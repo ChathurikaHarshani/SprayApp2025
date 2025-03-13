@@ -1,0 +1,46 @@
+.left-nav-btn.collapsed:not(#top_arrow_button):after {
+  font-family: "Font Awesome 5 Free";
+  content: "\f0d7";
+  font-weight: 900;
+  float: right;
+}
+
+.left-nav-btn:not(#top_arrow_button):after { 
+  font-family: "Font Awesome 5 Free";
+  content: "\f0d8";
+  font-weight: 900;
+  float: right;
+}
+
+#Main_Toolbar_Collapse {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  width: max(250px, 10%);
+  max-height: 60%;
+}
+
+.left-nav-card-header {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+
+/* Changes when screen shrinks to mobile device size */
+@media screen and (max-width: 415px) {
+  
+  /* Extend left menu */
+  #Main_Toolbar_Collapse {
+    width: 100%;
+    max-height: 90%;
+  }
+
+  /* Move map controls to bottom left */
+  .leaflet-top.leaflet-right {
+    top: auto;
+    right: auto;
+    bottom: 0%;
+    left: 0%;
+  }
+}

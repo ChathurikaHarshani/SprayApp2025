@@ -1,0 +1,6 @@
+username - SprayTest
+sqlUserQuery - 'SELECT SQL_NO_CACHE User_ID FROM User_Info WHERE `Username`= %s;'
+userID - 49
+orgID - None
+userID: 49
+orgID: None

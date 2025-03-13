@@ -1,0 +1,13 @@
+username - SeniorDesign
+sqlUserQuery - 'SELECT SQL_NO_CACHE User_ID FROM User_Info WHERE `Username`= %s;'
+userID - 11
+orgID - [(2,)]
+userID: 11
+orgID: [(2,)]
+appList - []
+appDict - {'type': 'FeatureCollection', 'name': '2pestApps', 'features': []}
+pestApps = {'type': 'FeatureCollection', 'name': '2pestApps', 'features': []}
+
+test file format:
+type:'FeatureCollection'
+name:'2pestApps'

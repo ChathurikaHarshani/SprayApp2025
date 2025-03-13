@@ -1,0 +1,6 @@
+username - SeniorDesign
+sqlUserQuery - 'SELECT SQL_NO_CACHE User_ID FROM User_Info WHERE `Username`= %s;'
+userID - 50
+orgID - None
+userID: 50
+orgID: None

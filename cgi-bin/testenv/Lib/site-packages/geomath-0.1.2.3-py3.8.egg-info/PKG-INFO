@@ -1,0 +1,12 @@
+Metadata-Version: 1.1
+Name: geomath
+Version: 0.1.2.3
+Summary: A Mathematic Library to Handle Eucliedan Geometry
+Home-page: https://github.com/vmesel/GeoMath/
+Author: Vinicius Mesel
+Author-email: me@vmesel.com
+License: UNKNOWN
+Download-URL: https://www.github.com/vmesel/GeoMath/tarball/0.1.2.3
+Description: UNKNOWN
+Keywords: geometry,math,euclidean geometry
+Platform: UNKNOWN

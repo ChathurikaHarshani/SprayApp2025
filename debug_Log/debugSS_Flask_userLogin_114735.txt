@@ -1,0 +1,7 @@
+start of procedure:
+post-procedure
+Email: 'spraysafely.seniordesign@gmail.com'
+Password: 'unlseniordesign'
+connection: <mysql.connector.connection.MySQLConnection object at 0x000001C721482D30>
+connection - Yes
+sql_query: 'SELECT SQL_NO_CACHE User_ID FROM User_Info WHERE `Password`=%s AND `Email`=%s'

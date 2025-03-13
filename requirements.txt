@@ -1,0 +1,28 @@
+cachelib==0.5.0
+certifi==2021.5.30
+charset-normalizer==2.0.6
+click==6.7
+DateTime==4.3
+Flask==1.1.1
+Flask-Session==0.4.0
+geomath==0.1.2.3
+idna==3.2
+itsdangerous==2.0.1
+Jinja2==3.0.2
+MarkupSafe==2.0.1
+mysql==0.0.3
+mysql-connector-python==8.0.27
+mysqlclient==2.1.0
+#ntsqltasks @ file:///cgi-bin/testenv/Lib/site-packages/ntsqltasks
+numpy==1.19.4
+#pntbound @ file:///home/qeuxdjhlf266/tobeinstall/pntbound
+protobuf==3.19.3
+PyCRS==1.0.2
+pyproj==3.3.0
+pyshp==2.3.0
+pytz==2021.3
+requests==2.26.0
+Shapely==1.8.0
+urllib3==1.26.7
+Werkzeug==2.0.1
+zope.interface==5.4.0

@@ -1,0 +1,5 @@
+start of procedure:
+start of post:
+acctType: '2'
+username: 'SeniorDesign'
+redirect Url: 'http://127.0.0.1:5000/jdaccess/?username=SeniorDesign'

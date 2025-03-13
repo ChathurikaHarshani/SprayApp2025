@@ -1,0 +1,11 @@
+setup.py
+ntsqltasks/__init__.py
+ntsqltasks/appdbTasks.py
+ntsqltasks/appdbTasks_pcorg.py
+ntsqltasks/userdbTasks.py
+ntsqltasks/userdbTasks_pcorg.py
+ntsqltasks.egg-info/PKG-INFO
+ntsqltasks.egg-info/SOURCES.txt
+ntsqltasks.egg-info/dependency_links.txt
+ntsqltasks.egg-info/not-zip-safe
+ntsqltasks.egg-info/top_level.txt

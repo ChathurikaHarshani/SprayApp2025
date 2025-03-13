@@ -1,0 +1,24 @@
+/********************** 
+This file has some styling for the modals
+***********************/
+
+
+.loading-overlay {
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: rgba(0,0,0,0.6);
+}
+
+
+/* Allow modals to appear on top of each other */
+.modal:nth-of-type(odd) {
+  z-index: 1062 !important;
+}
+
+.modal-backdrop.show:nth-of-type(odd) {
+  z-index: 1061 !important;
+}
+  

@@ -1,0 +1,27 @@
+cachelib==0.5.0
+caugetch==0.0.1
+certifi==2022.5.18.1
+charset-normalizer==2.0.12
+click==8.0.3
+clipboard==0.0.4
+colorama==0.4.4
+DateTime==4.3
+Flask==2.0.2
+Flask-Session==0.4.0
+getpass4==0.0.14.1
+idna==3.3
+itsdangerous==2.0.1
+Jinja2==3.0.3
+MarkupSafe==2.0.1
+mysql==0.0.3
+mysql-connector==2.2.9
+mysql-connector-python==8.0.27
+mysqlclient==2.1.0
+ntsqltasks @ file:///home/qeuxdjhlf266/tobeinstall/ntsqltasks
+protobuf==3.19.1
+pyperclip==1.8.2
+pytz==2021.3
+requests==2.27.1
+urllib3==1.26.8
+Werkzeug==2.0.2
+zope.interface==5.4.0

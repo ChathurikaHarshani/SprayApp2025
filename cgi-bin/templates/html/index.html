@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>SpraySafely_Interface_v4.0</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aladin">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Calistoga">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="assets/fonts/line-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="assets/css/farmManager.css">
+    <link rel="stylesheet" href="assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="assets/css/SpraySafely_TitleBar.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/Button.css">
+    <link rel="stylesheet" href="assets/css/Left-Menu-Map-Controls.css">
+    <link rel="stylesheet" href="assets/css/Modals.css">
+    <link rel="stylesheet" href="assets/css/Columns.css">
+
+</head>
+
+<!--Entire Page-->
+<body class="flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center align-self-center" style="background-position: center;background-repeat: no-repeat;background-size: cover;max-height: 100%;max-width: 100%;">
+    <!--Header-->
+    <div class="row d-flex flex-grow-1 flex-shrink-1 flex-fill align-content-center" style="max-width: 100%;margin-right: 0px;margin-left: 0px;">
+        <!--Left50% of Header-->
+        <div class="col-md-12 d-flex flex-grow-1 flex-shrink-1 flex-fill align-items-center align-content-center" style="padding-right: 0px;padding-left: 1.2%;max-width: 60%;background-color: rgb(255,255,255);"><a href="index.html"><img src="assets/img/SpraySafely_Logo_v2.png" style="width: 60px;"></a><a class="navbar-brand" style="margin-right: 0px;color: rgb(0,0,0);font-size:25px;font-weight: 600;">Spray-Safely</a></div>
+        <!--Right50% of Header-->
+        <div class="col" style="max-width: 40%;">
+            <nav class="navbar navbar-light navbar-expand sticky-top d-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-end align-items-end align-content-end mx-auto justify-content-xl-end align-items-xl-center navigation-clean-button" style="min-width: auto;padding-left: 0px;padding-right: 1.2%;max-height: none;min-height: auto;max-width: 100%;padding-top: 0px;padding-bottom: 0px;margin-left: 0px;margin-right: 0px;">
+            
+                <div class="container">
+                    
+                    <div class="collapse navbar-collapse d-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-xl-end align-items-xl-center" id="navcol-1" style="min-width: auto;">
+                        <ul class="nav navbar-nav mr-auto"></ul>
+                        <div class="dropdown" style="padding-right: 10px;"><a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fa fa-gear" style="font-size: 25px;text-align: center;"></i></a>
+                            <div class="dropdown-menu" style="margin-left: -100%;" id="userMenu"><a class="dropdown-item" href="#">Setting Preferences</a><a class="dropdown-item" href="#">Security Settings</a><a class="dropdown-item" href="#">Organization Settings</a></div>
+                        <!-- {% if username %} -->
+                            
+                        <!-- {% endif %} -->
+                        </div>
+                        <span class="navbar-text actions" style="padding-right: 10px;"> <a class="btn btn-light action-button" role="button" href="/login" style="padding-right: px;">Account</a></span>
+                    {% if username %}
+                        <span class="navbar-text actions" style="padding-right: 10px;"> <a class="btn btn-light action-button" role="button" href="/login" style="padding-right: px;">{{ username }}</a></span>
+                    {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!--Body Image-->
+    <div class="d-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center align-self-center" data-bs-parallax-bg="true" style="height: 65vh; width: auto;background-image: url(&quot;assets/img/background_main.jpg&quot;);background-position: center;background-size: cover;background-repeat: repeat;max-width: 100%;max-height: 100%;">
+    <!--Picture <img src="assets/img/background_main.jpg">-->
+    </div>
+    <!--Footer-->
+    <div class="d-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center footer-basic" style="padding: 10px;padding-bottom: 10px;padding-top: 10px;max-height: 100%;max-width: 100%;">
+        <footer>
+            <div class="social"><a href="#"><i class="icon ion-social-instagram"></i></a><a href="#"><i class="icon ion-social-snapchat"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-facebook"></i></a></div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="#">Home</a></li>
+                <li class="list-inline-item"><a href="#">Services</a></li>
+                <li class="list-inline-item"><a href="#">About</a></li>
+                <li class="list-inline-item"><a href="#">Terms</a></li>
+                <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">Spray-Safely © 2020</p>
+        </footer>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    {% if session.username %}
+    <script>
+        var userMenu = document.getElementById("userMenu");
+        var loOption = document.createElement( 'a' );
+        loOption.className = "dropdown-item";
+        loOption.href = "/logout";
+
+        loOption.innerHTML = "Logout";
+        userMenu.appendChild(loOption);
+    </script>
+    {% endif %}
+</body>
+
+</html>

@@ -1,0 +1,3 @@
+Email: spraysafely.seniordesign@gmail.com
+Password: unlseniordesign
+Database connection established.

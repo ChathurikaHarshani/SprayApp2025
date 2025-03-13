@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html id="userMain_HTML" style="width: 100%; height: 100%;">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>SpraySafely_Interface_v4.0</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aladin">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Calistoga">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="assets/fonts/line-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="assets/css/farmManager.css">
+    <link rel="stylesheet" href="assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="assets/css/SpraySafely_TitleBar.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/Button.css">
+    <link rel="stylesheet" href="assets/css/Columns.css">
+    <link rel="stylesheet" href="assets/css/Left-Menu-Map-Controls.css">
+    <link rel="stylesheet" href="assets/css/Modals.css">
+    
+
+    <meta charset="utf-8" />
+    <title>Esri Leaflet Quickstart</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+
+    <!-- Load jQuery -->
+    <script src="assets/js/jquery.min.js"></script>
+
+    <!-- Load Leaflet from CDN -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <!-- Load Leaflet Draw -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@2.5.0/dist/esri-leaflet.js"
+        integrity="sha512-ucw7Grpc+iEQZa711gcjgMBnmd9qju1CICsRaryvX7HJklK0pGl/prxKvtHwpgm5ZHdvAil7YPxI1oWPOWK3UQ=="
+        crossorigin="">
+    </script>
+
+    <!-- Load Selectize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" 
+        integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" 
+        crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.bootstrap3.min.css" 
+        integrity="sha256-ze/OEYGcFbPRmvCnrSeKbRTtjG4vGLHXgOqsyLFTRjg=" 
+        crossorigin="anonymous" />
+</head>
+
+<body id="userMain_body" onload="userMain_Load()" style="width: 100%; height: 100%;">
+
+    <!-- Header bar at top of page -->
+    <div class="navbar navbar-expand navbar-expand-lg navbar-light bg-light" style="height:60px;padding-left:0px;">
+        <!-- Spray-Safely Logo -->
+        <a href="#" class="navbar-brand" style="margin-right:0px;">
+            <img id="ssLogo_img" src="assets/img/SpraySafely_Logo_v2.png" style="width: min(60px, 15vw);">
+        </a>
+
+        <div class="navbar-collapse collapse show" id="navbarSupportedContent">
+            <!-- Left half of navbar -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <div style="color: rgb(0,0,0);font-weight: 600;font-size: min(25px, 5vw)">Spray-Safely</div>
+                </li>
+            </ul>
+
+            <!-- Right half of navbar -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: rgb(0,123,255);">
+                        <i class="fa fa-gear" id="ssSettings_Icon-1" style="font-size: min(25px, 10vw);text-align: center;">
+                        </i>
+                    </a>
+                    <!-- TODO: Make these buttons do something -->
+                    <div id="ssSettings_Menu" class="dropdown-menu dropdown-menu-right">
+                        <button class="dropdown-item" id="ssSetting_Menu_1" href="#" style="color: rgb(55,67,77);">
+                            Setting Preferences
+                        </button>
+                        <button class="dropdown-item" id="ssSetting_Menu_2" href="#" style="color: rgb(55,67,77);">
+                            Security Settings
+                        </button>
+                        <button class="dropdown-item" id="ssSetting_Menu_3" href="#" style="color: rgb(55,67,77);">
+                            Organization Settings
+                        </button>
+
+                        {% if orgowner %}
+                        <form action="/invitePage">
+                            <button class="dropdown-item" id="ssSetting_Menu_4" href="#" style="color: rgb(55,67,77);">
+                                Invite New User
+                            </button>
+                        {% else %}
+                            <button class="dropdown-item" id="ssSetting_Menu_4" href="#" style="color: rgb(55, 67, 77);">
+                                <font color="#D3D3D3">Invite New User</font>
+                            </button>
+                        {% endif %}
+                        </form>
+
+                        <button class="dropdown-item" id="ssSetting_Menu_5" data-toggle="modal" data-target="#dataLinkModal" style="color: rgb(55,67,77);">
+                            Link Data Account
+                        </button>
+
+                        <form action="/changePasswordPage">
+                            <button class="dropdown-item" id="ssSetting_Menu_6" href="#" style="color: rgb(55,67,77);">
+                                Change Password
+                            </button>
+                        </form>
+
+                    </div>
+                </li>
+                <li class="nav-item active">
+                    <!-- TODO: Make this button do something -->
+                    <a role="button" id="ssUser_Btn" href="#" class="btn btn-light" style="background: rgb(86,198,198);color: rgb(255,255,255); border-width: 0px; 
+                        border-radius: 24px; width: fit-content; max-width:20vw; min-width:5vw; height: 100%; font-size:min(100%,4vw); display:inline-block; text-overflow:ellipsis; overflow:hidden;">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+   
+
+
+    <!-- Page Body -->
+    <div id="Main_Row" style="width: 100%; height: calc(100% - 60px);">
+        <div class="col offset-lg-1 M" id="Main_Clm" style="padding-left: 0px;padding-right: 0px;margin-left: 0px;height: 100%;">
+
+            <div id="Main_Toolbar_Collapse" class="accordion hide-when-drawing" style="z-index: 500;position: absolute;overflow-x:hidden;overflow-y:auto;scrollbar-width: thin;">
+
+                <div class="card" id="FarmManagementToolbar_Content" style="width: 100%;opacity: 85%; ">
+                    <!-- Arrow at the top of the left menu -->
+                    <div class="card-header left-nav-card-header">
+                        <h1 id="FS_farmStructure_Heading">
+                            <button class="btn-custom left-nav-btn btn-link btn-block align-items-center" id="top_arrow_button"
+                                type="button" data-toggle="collapse" data-target="#overall_body">
+                                <i id="main_arrow" class="fas fa-caret-down fa-2x">
+                                </i>
+                            </button>
+                        </h1>
+                    </div>
+
+                    <!-- Left Navigation Menu Body -->
+                    <div id="overall_body" class="collapse" data-parent="#Main_Toolbar_Collapse" >
+                    <!--<div id="overall_body" class="collapse" data-parent="#Main_Toolbar_Collapse" style="">-->
+                        <div id="farms_accordion" class="accordion">
+
+                        </div>
+
+
+                        <div id="add_application_div">
+
+                        </div>
+
+                        <!-- <button class="btn-custom text-left" id="addApplication" type="button"
+                            style="width: 100%; padding-left:20px; padding-right:20px">
+                            <i style="padding-left: 20px; padding-right: 20px">
+                                <i class="fas fa-spray-can"></i>
+                                Add Application
+                            </i>
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Map Div-->
+            <div class="d-flex flex-grow-1 flex-shrink-1 flex-fill align-content-center align-self-center" id="Map_Div"
+                style="z-index: 0;position: absolute; width: 100%; height: 100%;">
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+   
+   
+   
+    <!-- Modals -->
+    <div class="container" id="Modal_Container">
+
+
+        <div class="modal fade" role="dialog" tabindex="-1" id="addProductToTankMixModal" style="max-height: 90%;">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+
+                <div id="addProductToTankMixLoading" class="loading-overlay justify-content-center align-items-center">
+                    <div class="spinner-border text-primary">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+
+
+
+                <div class="modal-content">
+                    <div class="modal-header" style="max-height: 10%;">
+                        <i class="icon ion-ios-flask-outline" style="padding-right: 10px;color: rgb(20,169,233);border-top-left-radius: -41px;text-shadow: -1px 1px 4px rgb(20,169,233), 2px 0px 4px rgb(20,169,233);font-size: 30px;border: 3px none rgb(4,4,4);"></i>
+                        
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Add/Edit Product</h4>
+                        
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+
+                    <div class="modal-body" style="height:40vh;">
+                        <div id="prdDiv" style="overflow-y: auto;height: 95%;">
+                            
+                            <form action="" method="post" id="prdContainer" style="border-color: rgb(160,159,159);">
+                                
+                                <div class="form-group">
+                                    <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Product</h1>
+                                    
+                                    <select id="pm_Product_Sel">
+                                        <option value="-" selected="">-</option>
+                                    </select>
+                                    
+                                    <!-- <button class="btn-custom btn-light" id="addPrdbtn" type="button" style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;">
+                                        <i class="fa fa-plus" style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;"></i>
+                                        Add
+                                    </button> -->
+                                        
+                                    <label id="pm_ProductSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Product Rate</h1>
+                                    
+                                    <input type="number" step="0.01" id="addProductToTankMixProductRate_Input" style="padding-top: 0px;">
+                                    
+                                    <label id="pm_ProductRate_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Product Units</h1>
+
+                                    <select id="addProductToTankMixRateUnits_Sel">
+                                        <option value="-" selected="">-</option>
+                                        <option value="oz / ac">oz / ac</option>
+                                        <option value="lb / ac">lb / ac</option>
+                                        <option value="floz / ac">floz / ac</option>
+                                        <option value="pt / ac">pt / ac</option>
+                                        <option value="qt / ac">qt / ac</option>
+                                        <option value="gal / ac">gal / ac</option>
+                                    </select>
+                                    
+                                    <label id="pm_ProductRateUnitsSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                                </div>
+
+                            </form>
+
+                        </div>
+
+
+
+                        <!-- <div id="addAdditionalPrd" style="overflow-y:none;height:5%;">
+                            <button class="btn-custom btn-primary" id="addMixPrdbtn" type="button" style="padding-left: 0px;padding-bottom: 0px;padding-right: 0px;padding-top: 0px;margin-top: 10px;margin-left: -5px;border-top-style: none;">
+                                <i class="fa fa-plus" style="color: rgb(16,202,0);margin-left: 0px;padding-right: 5px;"></i>
+                                Additional Product
+                            </button>
+                        </div> -->
+                    </div>
+
+
+                    <div class="modal-footer" style="max-height: 10%;">
+                        <button class="btn btn-light" id="closeProduct_Modal" type="button">Close</button>
+                        <button class="btn btn-primary" id="saveProduct_Modal" type="button">Save</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" role="dialog" tabindex="-1" id="addTankMixModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+
+                    <div id="addTankMixModalLoading" class="loading-overlay justify-content-center align-items-center">
+                        <div class="spinner-border text-primary">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-header">
+                        <i class="icon ion-ios-flask-outline" style="padding-right: 10px;color: rgb(20,169,233);border-top-left-radius: -41px;text-shadow: -1px 1px 4px rgb(20,169,233), 2px 0px 4px rgb(20,169,233);font-size: 30px;border: 3px none rgb(4,4,4);"></i>
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Add Tank Mix</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+
+                    <div class="modal-body">
+
+                        <div id="tankMixName">
+                            <h1 id="tm_TankMixName_Heading" style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Tank Mix Name</h1>
+                            
+                            <input type="text" id="tm_TankMixName_Input" style="padding-top: 0px;">
+                            
+                            <label id="tm_TankMixName_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                        </div>
+
+
+                        <div id="carrier" style="padding-top: 10px;">
+                            <h1 id="tm_Carrier_Heading" style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Carrier</h1>
+
+                            <select id="tm_Carrier_Sel">
+                                <option value="-" selected="">-</option>
+                            </select>
+                            
+                            <label id="tm_CarrierSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                        </div>
+
+
+                        <div id="carrierRate" style="padding-top: 10px;">
+                            <h1 id="tm_carrierRate_Heading" style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Carrier Rate</h1>
+                                
+                            <input type="number" step="0.01"  id="tm_CarrierRate_Input" style="padding-top: 0px;">
+                                
+                            <label id="tm_CarrierRate_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                        </div>
+
+
+                        <div id="carrierRateUnits" style="padding-top: 10px;">
+                            <h1 id="tm_CarrierUnits_Heading" style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Carrier Units</h1>
+
+                            <select id="tm_CarrierUnits_Sel">
+                                <option value="-" selected="">-</option>
+                                <option value="oz / ac">oz / ac</option>
+                                <option value="lb / ac">lb / ac</option>
+                                <option value="floz / ac">floz / ac</option>
+                                <option value="pt / ac">pt / ac</option>
+                                <option value="qt / ac">qt / ac</option>
+                                <option value="gal / ac">gal / ac</option>
+                            </select>
+
+                            <label id="tm_CarrierUnitsSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                        </div>
+
+
+                        <div id="productMixture" style="padding-top: 10px;">
+                            <h1 id="tm_productMix_Heading" style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;border-bottom-style: solid;">Product Mixture</h1>
+                            
+                            <ul id="tm_productMix_List">
+                                <!-- <li>
+                                    <div id="product_1" style="display: table-row">
+                                        <div id="productDetails_1" style="display: table-cell">Item 1, 15 oz/ac</div>
+                                        <button class="btn-custom btn-primary edit-product" id="editProductBtn_1" type="button" style="margin-bottom: 5px;">
+                                            <i class="fa fa-plus" style="color: rgb(16,202,0);margin-left: 0px;padding-right: 5px;"></i>
+                                            Edit
+                                        </button>
+                                    </div>
+                                </li> -->
+                            </ul>
+                            
+                            <label id="tm_ProductMixList_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                        </div>
+
+
+                        <div id="addProductToTankMix" style="overflow-y:none;height:5%;">
+                            <button class="btn-custom btn-primary" id="addMixProductBtn" type="button" style="padding-left: 0px;padding-bottom: 0px;padding-right: 0px;padding-top: 0px;margin-top: 10px;margin-left: -5px;border-top-style: none;">
+                                <i class="fa fa-plus" style="color: rgb(16,202,0);margin-left: 0px;padding-right: 5px;"></i>
+                                Add Product
+                            </button>
+                        </div>
+
+
+                        <!-- <div style="padding-top: 14px;">
+                            <button class="btn-custom btn-light" id="addProductsbtn" type="button" style="font-size: 100%;padding-right: 6px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: normal;font-weight: bold;">
+                                <i class="fa fa-plus" style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;"></i>
+                                Add Product Mixture
+                            </button>
+                        </div> -->
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <label id="tankMixSave_Alert" style="font-style: italic;padding-left: 10px;" class="mr-auto"></label>
+                        <button class="btn btn-light" id="closeTM_Modal" type="button">Close</button>
+                        <button class="btn btn-primary" id="saveTM_Modal" type="button">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="modal fade" role="dialog" tabindex="-1" id="addApplicatorModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+
+                    <div id="addApplicatorModalLoading" class="loading-overlay justify-content-center align-items-center">
+                        <div class="spinner-border text-primary">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-header"><i class="fas fa-user-alt"
+                            style="padding-right: 10px;color: rgb(233,199,20);border-top-left-radius: -41px;border: 3px none rgb(4,4,4);text-shadow: -1px -1px 3px rgb(0,0,0), 1px 1px 3px rgb(0,0,0);font-size: 30px;"></i>
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Add Applicator</h4><button
+                            type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
+
+
+                    <div class="modal-body">
+                        <!-- <div>
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Applicator ID</h1>
+                            <input type="text" id="apc_ApplicatorID_Input" style="padding-top: 0px;">
+                            
+                            <label id="apc_ApplicatorID_Alert"
+                                style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                            </label>
+                        </div> -->
+
+
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">First Name</h1>
+                            <input type="text" id="apc_FirstName_Input" style="padding-top: 0px;">
+                            
+                            <label id="apc_FirstName_Alert"
+                                style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                            </label>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Last Name</h1>
+                            <input type="text" id="apc_LastName_Input" style="padding-top: 0px;">
+                            
+                            <label id="apc_LastName_Alert"
+                                style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                            </label>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">                                
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Organization</h1>
+
+                            <select id="applicator_OrgName_Sel">
+                            </select>
+                                
+                            <label id="apc_OrgName_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <label id="applicator_ApplicatorSave_Alert" style="font-style: italic;padding-left: 10px;" class="mr-auto"></label>
+                        <button class="btn btn-light" id="closeAPC_Modal"type="button">Close</button>
+                        <button class="btn btn-primary" id="saveAPC_Modal" type="button">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="modal fade" role="dialog" tabindex="-1" id="addApplicationModal">
+            
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                
+                <div class="modal-content">
+
+                    <div id="addApplicationModalLoading" class="loading-overlay justify-content-center align-items-center">
+                        <div class="spinner-border text-primary">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    
+
+                    <div class="modal-header"><i class="fas fa-spray-can"
+                            style="padding-right: 2%;border-top-left-radius: -41px;border: 3px none rgb(1,1,1);font-size: 30px;color: rgb(1,1,1);"></i>
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Add/Edit Application</h4><button
+                            type="button" id="closeAPPWithX_Modal" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div>
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Farm</h1>
+                            <div class="container" style="padding-left: 0px;padding-right: 0px;">
+                                <div class="form-group">
+                                    <select id="app_FarmName_Sel"></select>
+                                    <button class="btn-custom btn-primary" id="appAddFarmbtn" type="button"
+                                        style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;">
+                                        
+                                        <i class="fa fa-plus"
+                                            style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;">
+                                        </i>
+                                        Add&nbsp;                                    
+                                    </button>
+                                    <label id="app_FarmNameSel_Alert"
+                                        style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Field</h1>
+                            <div class="form-group">
+                                <select id="app_FieldName_Sel">
+                                    <option value="-" selected="">- Select Farm First -</option>
+                                </select>
+                                <button class="btn-custom btn-primary" id="addFieldbtn" type="button"
+                                    style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;">
+                                    <i class="fa fa-plus"
+                                        style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;">
+                                    </i>
+                                    Add&nbsp;
+                                </button>
+                                
+                                <label
+                                    id="app_FieldNameSel_Alert"
+                                    style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Applicator</h1>
+                            <div class="form-group">
+                                <select id="app_Applicator_Sel">
+                                    <option value="-" selected="">-</option>
+                                </select>
+                                <button class="btn-custom btn-primary" id="addApplicatorbtn" type="button"
+                                    style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;">
+                                    <i class="fa fa-plus"
+                                        style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;">
+                                    </i>
+                                    Add&nbsp;
+                                </button>
+                                <label id="app_ApplicatorSel_Alert"
+                                    style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">
+                                Date
+                                <label id="app_Date_Schedule_Alert"
+                                    style="color: rgba(8, 75, 199, 0.808);font-style: italic;padding-left: 10px;">
+                                </label>
+                            </h1>
+
+
+                            <input id="app_Date_Input" type="date" autocomplete="off">
+                            <label id="app_Date_Alert"
+                                style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                            </label>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">End Time</h1>
+                            <input id="app_Time_Input" type="time" autocomplete="off">
+                            <label id="app_Time_Alert"
+                                style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                            </label>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Tank Mix</h1>
+                            <div class="form-group">
+                                <select id="app_TankMix_Sel">
+                                    <option value="-" selected="">-</option>
+                                </select>
+
+                                <button class="btn-custom btn-primary" id="addTankMixbtn" type="button" style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;">
+                                    <i class="fa fa-plus" style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;"></i>
+                                    Add&nbsp;
+                                </button>
+                                        
+                                <label id="app_TankMixSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                            </div>
+                        </div>
+
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Application Type</h1>
+                            <div class="form-group">
+                                <select id="app_AppType_Sel">
+                                    <option disabled selected value="-">-</option>
+                                    <option value="Pre-Emerge">Pre-Emerge</option>
+                                    <option value="Post-Emerge">Post-Emerge</option>
+                                    <option value="Burndown">Burndown</option>
+                                </select>
+                                <!-- <button class="btn-custom btn-primary" id="addAppTypebtn" type="button"
+                                    style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;"><i
+                                        class="fa fa-plus"
+                                        style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;"></i>Add&nbsp;
+                                </button> -->
+                                <label
+                                    id="app_AppTypeSel_Alert"
+                                    style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                                </label>
+                            </div>
+                        </div>
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Equipment Name</h1>
+                            <input id="app_EquipName_Input" placeholder="Equipment name">
+
+                            <!-- <div class="form-group">     
+                                <select id="app_Equip_Sel">
+                                    <option value="-" selected="">-</option>
+                                </select> -->
+                                
+                                <!-- <button class="btn-custom btn-primary" id="addEquipbtn" type="button"
+                                    style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;"><i
+                                        class="fa fa-plus"
+                                        style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;"></i>Add&nbsp;
+                                </button> -->
+                                
+                                <label
+                                    id="app_EquipName_Alert"
+                                    style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                                </label>
+                            <!-- </div> -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <label id="ApplicationSave_Alert" style="font-style: italic;padding-left: 10px;" class="mr-auto"></label>
+                        
+                        <button class="btn btn-secondary" id="closeAPP_Modal" type="button">Close</button>
+                        <button class="btn btn-danger" id="deleteApp_btn" type="button" style="display: none;">Delete</button>
+                        <button class="btn btn-primary" id="saveAPP_Modal" type="button">Save</button></div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <div class="modal fade" role="dialog" tabindex="-1" id="addBoundaryModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header"><i class="fas fa-vector-square"
+                            style="padding-right: 10px;border-top-left-radius: -41px;border: 3px none rgb(1,1,1);font-size: 30px;color: rgb(6,6,6);"></i>
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Add Boundary</h4><button type="button"
+                            class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body text-center"><button class="btn btn-primary" id="drawBound_btn" type="button"
+                            style="background: #d2d1d1;margin-right: 3px;margin-left: 3px;">Draw
+                            Boundary</button><button class="btn btn-primary" id="editBound_btn" type="button"
+                            style="background: #d2d1d1;margin-right: 3px;margin-left: 3px;">Edit
+                            Bourndary</button><button class="btn btn-primary" id="uploadBound_btn" type="button"
+                            style="background: #d2d1d1;margin-right: 3px;margin-left: 3px;">Upload Boundary</button>
+                    </div>
+                    <div class="modal-footer"><button class="btn btn-light" id="closeAddBND_Modal"
+                            type="button">Close</button></div>
+                </div>
+            </div>
+        </div> -->
+
+
+
+
+        <div class="modal fade" role="dialog" tabindex="-1" id="addFieldModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+
+                    <div id="addFieldModalLoading" class="loading-overlay justify-content-center align-items-center">
+                        <div class="spinner-border text-primary">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-header">
+                        <i class="fas fa-tractor" style="padding-right: 10px;color: rgb(233,199,20);border-top-left-radius: -41px;border: 3px none rgb(4,4,4);text-shadow: -1px -1px 3px rgb(0,0,0), 1px 1px 3px rgb(0,0,0);font-size: 30px;">
+                        </i>
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Add Field</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Farm Name</h1>
+                            <div class="container d-inline-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-start align-content-start align-self-center"
+                                style="padding-left: 0px;padding-right: 0px;">
+                                
+                                <select id="field_FarmName_Sel">
+                                </select>
+                                
+                                <!-- <button class="btn-custom btn-light" id="fieldAddFarmbtn" type="button"
+                                    style="font-size: 100%;padding-right: 6px;padding-left: 20px;min-width: auto;max-width: none;padding-bottom: 0px;padding-top: 0px;font-style: italic;">
+                                    <i class="fa fa-plus"
+                                        style="color: rgb(3,169,59);text-align: center;font-size: 100%;padding-right: 5px;">
+                                    </i>
+                                    Add&nbsp;
+                                </button> -->
+                            </div>
+                            <label id="field_FarmNameSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                        </div>
+
+                        <div style="padding-top: 10px;">
+                            <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">Field Name</h1>
+                            <input type="text" id="field_FieldName_Input" style="padding-top: 0px;">
+                            
+                            <label id="field_FieldName_Alert"
+                                style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;">
+                            </label>
+                        </div>
+
+
+                        <div class="modal-header" style="padding-left: 0;">
+                            <i class="fas fa-vector-square" style="padding-right: 10px;border-top-left-radius: -41px;border: 3px none rgb(4,4,4);font-size: 30px;">
+                            </i>
+                            <h4 class="modal-title w-100 float-left" style="color: rgb(152,149,149);">Add Boundary</h4>
+                        </div>
+
+                        <div style="padding-top: 1%;">
+                            <button id="drawBoundarybtn" type="button" class="btn btn-secondary" style="color: #fff; background-color: #6c757d;">Draw Boundary</button>
+                            <!-- <button id="uploadBoundarybtn" type="button" class="btn btn-secondary" style="color: #fff; background-color: #6c757d;">Upload Boundary</button> -->
+                            <button id="deleteBoundarybtn" type="button" class="btn btn-danger" style="color: #fff; background-color: #d9534f; display: none;">Delete</button>
+                            <label id="addField_boundary_alert" style="font-style: italic; padding-left: 10px;" class="mr-auto"></label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <label id="field_FieldSave_Alert" style="font-style: italic;padding-left: 10px;" class="mr-auto"></label>
+                        <button class="btn btn-light" id="closeFLD_Modal" type="button">Close</button>
+                        <button class="btn btn-primary" id="saveFLD_Modal" type="button">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        
+        <div class="modal fade" role="dialog" tabindex="-1" id="addFarmModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+
+                    <div id="addFarmModalLoading" class="loading-overlay justify-content-center align-items-center">
+                        <div class="spinner-border text-primary">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-header" style="font-size: none;">
+                        <i class="fas fa-warehouse" style="color: rgb(177,6,6);border-top-left-radius: -41px;border: 3px none rgb(4,4,4);
+                            text-shadow: 0px 0px rgb(10,10,10);text-align: left;max-height: 100%;height: 100%;padding-right: 10px;font-size: 30px;">
+                        </i>
+                        <h4 class="modal-title" style="font-size: 24px;color: rgb(152,149,149);">
+                            Add Farm
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <!-- <form action="/saveNewFarm" method="POST"> -->
+                        <div class="modal-body">
+                            <div>
+                                <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">
+                                    Farm Name
+                                </h1>
+                                <input type="text" name="farmName" class="form-control" id="farm_FarmName_Input" style="padding-top: 0px;" required>
+                                <div class="invalid-feedback">Farm name is required</div>
+                                <label id="farm_FarmName_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                            </div>
+                            <div style="padding-top: 10px;">
+                                <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">
+                                    Organization
+                                </h1>
+                                <select id="farm_FarmOrg_Sel">
+                                    <option value="-">-</option>
+                                </select>
+                                <label id="farm_FarmOrgSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                            </div>
+                            <div style="padding-top: 10px;">
+                                <h1 style="font-size: 16px;color: rgb(7,7,7);margin-bottom: 0px;">
+                                    Status
+                                </h1>
+                                <select id="farm_FarmStatus_Sel">
+                                    <option value="-">-</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Retired">Retired</option>
+                                </select>
+                                <label id="farm_FarmStatusSel_Alert" style="color: rgb(241,8,8);font-style: italic;padding-left: 10px;"></label>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <label id="farm_FarmSave_Alert" style="font-style: italic;padding-left: 10px;" class="mr-auto"></label>
+                            <button class="btn btn-light" id="closeFRM_Modal"type="button">
+                                Close
+                            </button>
+                            <button class="btn btn-primary" id="saveFRM_Modal" type="submit">
+                                Save
+                            </button>
+                        </div>
+                    <!-- </form> -->
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="modal fade" role="dialog" tabindex="-1" id="uploadBoundaryModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header"><i class="fas fa-vector-square"
+                            style="padding-right: 10px;border-top-left-radius: -41px;border: 3px none rgb(1,1,1);font-size: 30px;color: rgb(6,6,6);"></i>
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Upload Boundary</h4><button
+                            type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body text-left">
+                        <h1 id="UpLd_heading" style="font-size: 22px;text-align: justify;font-style: normal;">Select Upload File Location</h1>
+                        <div class="row" style="margin-left: 0px;">
+                            <div class="col">
+                                <div class="text-left" id="uploadDir_Div">
+                                    <input type="text" id="fileDirLocation_tb" style="text-align: left;width: 421px;">
+                                    <label class="btn btn-primary" id="browseDir_btn" type="button">
+                                        <i class="fa fa-folder-open-o"></i>
+                                        <input id="uploadedBoundaryFile" style="display: none;" type="file" onchange="document.getElementById('fileDirLocation_tb').value = this.value"/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left: 0px;">
+                            <div class="col" style="margin-left: 0px;">
+                                <button class="btn btn-primary" id="UpLd_uploadBound_btn" type="button"
+                                    style="background: #d2d1d1;margin-right: 3px;margin-left: 0px;margin-top: 4px;">
+                                    Upload Boundary
+                                </button>
+                            </div>
+                            <div class="col text-left align-self-center">
+                                <h1 class="text-lowercase" id="uploadStatus_heading"
+                                    style="width: 284px;color: var(--red);font-style: italic;font-size: 19px;text-align: justify;margin-bottom: 0px;">
+                                    File Upload Successful
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-light" id="closeUploadBND_Modal" type="button">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div class="modal fade" role="dialog" tabindex="-1" id="dataLinkModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Link Data Account</h4><button class="close" type="button"
+                            data-dismiss="modal" aria-label="Close"><span aria-hidden="true">x</span></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="dataLinkModalForm" action="/userMain/dataLinkConnect" method="post">
+                            <p name="descriptionLbl">Select Account Type</p>
+                            <select class="form-control" name="accountType">
+                                <optgroup label="Account">
+                                    <option value="1"></option>
+                                    <option value="2">John Deere Operations Center</option>
+                                </optgroup>
+                            </select>
+                            <!-- <input name ="usernameLbl" value={{ username }} hidden="True"> -->
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-light" type="button" data-dismiss="modal">Close</button>
+                        <button class="btn btn-light" type="submit" id="connectBtn"
+                            form="dataLinkModalForm">Connect</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- <div class="modal fade" role="dialog" tabindex="-1" id="pListModal">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <i class="icon ion-ios-flask-outline"
+                            style="padding-right: 10px;color: rgb(20,169,233);border-top-left-radius: -41px;text-shadow: -1px 1px 4px rgb(20,169,233), 2px 0px 4px rgb(20,169,233);font-size: 30px;border: 3px none rgb(4,4,4);">
+                        </i>
+                        <h4 class="modal-title" style="color: rgb(152,149,149);">Applied TankMix</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="scrollAble" id="pListContent">
+                            <h4 id="pListCarrierHeading"><b><u>CARRIER:</u></b></h4>
+                            <div id="pList_CarrierContent" class="tab"></div>
+                            <h4><b><u>PRODUCTS:</u></b></h4>
+                            <div id="pList_PrdContent" class="tab"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-light" id="closePList_Modal" type="button">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+
+    
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/jd_auth.js"></script>
+
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/userMain_JS.js"></script>
+    <script src="assets/js/modal_JS.js"></script>
+
+
+    {% if session.username %}
+    <script type="text/javascript">
+        var userButton = document.getElementById("ssUser_Btn");
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        var username = urlParams.get('username');
+        userButton.innerHTML = username;
+    </script>
+    <script>
+        var userMenu = document.getElementById("ssSettings_Menu");
+        var loOption = document.createElement('a');
+        loOption.className = "dropdown-item";
+        loOption.href = "/logout";
+        loOption.innerHTML = "Logout";
+        userMenu.appendChild(loOption);
+    </script>
+
+    {% endif %}
+</body>
+
+</html>

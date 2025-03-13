@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>SpraySafely_Interface_v5.0</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aladin">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Calistoga">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/ionicons.min.css">
+    <link rel="stylesheet" href="assets/fonts/line-awesome.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome5-overrides.min.css">
+    <link rel="stylesheet" href="assets/css/farmManager.css">
+    <link rel="stylesheet" href="assets/css/Footer-Basic.css">
+    <link rel="stylesheet" href="assets/css/Login-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="assets/css/SpraySafely_TitleBar.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/Button.css">
+    <link rel="stylesheet" href="assets/css/Left-Menu-Map-Controls.css">
+    <link rel="stylesheet" href="assets/css/Modals.css">
+    <link rel="stylesheet" href="assets/css/Columns.css">
+    <link rel="stylesheet" href="assets/css/SwitchSelector.css">
+</head>
+
+<body class="d-flex flex-grow-1 flex-shrink-1 flex-fill justify-content-center align-items-center align-content-center align-self-center m-auto login-clean" style="background: url(&quot;assets/img/1597889.jpg&quot;); background-size: cover;">
+
+    <form id="sendInvite" action="/invite" method="post" style="margin-top: 8%;margin-bottom: 10%;">
+        <img src="assets/img/SpraySafely_Logo_v2.png" style="width: 230px;padding-bottom: 40px;">
+        <div style="text-align: center; padding-bottom: 10%;"><b>Invite a New User To Your Organization</b></div>
+        <h2 class="sr-only">Invitation Form</h2>
+        <div class="illustration" style="padding-bottom: 0px;"></div>
+        {% if message %}
+            <p style="color: var(--red); text-align: center;">{{ message }}</p>
+        {% endif %}
+        
+        <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email" required="" maxlength="none" minlength="4"></div>
+        <div style="margin-bottom: 20px; text-align: center">
+            <b>Organization:</b>
+            <select class="custom-select" name="organizationName" id="farm_FarmOrg_Sel" required></select>
+        </div>
+
+        <div class="form-group">
+            <div style="display: flex; justify-content: center;">
+                <span style="margin: 0 10px 14px 0;">Give user edit access?</span>
+                <label class="switch form-group">
+                    <input type="hidden" value="0" name="checkbox"><input type="checkbox" id="userAccessSlider" onclick="this.previousElementSibling.value=1-this.previousElementSibling.value; checkBoxChecked();">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <p id="text" style="display:none; font-size: 14px; text-align:center;"><b>User will be granted edit access upon confirmation</b></p>
+        </div>
+        
+        <div class="form-group"><button class="btn btn-primary btn-block" action="submit" style="background-color: rgb(92,136,56);">Submit</button></div>
+        {% if successmessage %}
+            <p style="color: var(--green); text-align: center;">{{ successmessage }}</p>
+        {% endif %}
+        {% if failmessage %}
+            <p style="color: var(--green); text-align: center;">{{ failmessage }}</p>
+        {% endif %}
+    </form>
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/modal_JS.js"></script>
+    <!-- <script src="assets/js/userMain_JS.js"></script> -->
+    <script src="assets/js/userMenu.js"></script>
+    <script>
+        function checkBoxChecked(){
+            // Get the checkbox
+          var checkBox = document.getElementById("userAccessSlider");
+          // Get the output text
+          var text = document.getElementById("text");
+        
+          // If the checkbox is checked, display the output text
+          if (checkBox.checked == true){
+            text.style.display = "block";
+          } else {
+            text.style.display = "none";
+          }
+        }
+
+        orgSel = document.getElementById('farm_FarmOrg_Sel');
+	    var url = '/getOrganizationNames';
+	    allOrgNames = xmlhttp_get(url);
+
+	    popSelectionElem(orgSel, allOrgNames);
+        orgSel.selectedIndex = 0;
+	   
+        orgSel.value = "";
+    </script>
+
+</body>
+
+</html>
+
