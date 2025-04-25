@@ -19,10 +19,41 @@ import random
 import smtplib
 import bcrypt
 from dotenv import load_dotenv
+import geomath
+from geomath import hulls 
+
+
+# from johndeere.cgibin.app import jd_blueprint
+# app = Flask(__name__)
+# app.register_blueprint(jd_blueprint)
+# @app.route('/')
+# def home():
+#     return "Welcome to Spray-Safely Main Domain"
+
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 hashed_pw = generate_password_hash("yourpassword123")
-print(hashed_pw)
+#print(hashed_pw)
 
 #from johndeere.cgibin.app import app as jd
 
@@ -32,8 +63,10 @@ app = Flask(__name__, static_folder='templates/assets',
 
 
 app.secret_key = "jdss88"
-
 app.config['SERVER_NAME']= '127.0.0.1:5000'
+
+
+
 #app.config['SERVER_NAME'] = 'spray-safely.test:5000'
 # app.config['SESSION_COOKIE_DOMAIN'] = '.test'
 
@@ -66,45 +99,30 @@ debug = True
 
 
 
-
 def createAppJson(username, key):
-    print("🛠️ createAppJson() function started")  # Step 1: Debug Start
-
-    debugFile = nt_debug_write_file("createAppJson_Exception")
     try:
-        print(f"🔹 Processing createAppJson for user: {username}")
-
-        # Create database connection
         connection = userTask.create_db_connection()
         if not connection:
-            print("❌ Error: Database connection failed")
-            return None
+            error_message = "❌ Error: Database connection failed."
+            return render_template('error.html', message=error_message)
 
-        # Get userID from the username
         sql_query = userTask.select_userID_by_username_query()
         userID_result = userTask.execute_select_query_vals(connection, sql_query, [username])
-
         if not userID_result:
-            print("❌ Error: No userID found for this username")
-            return None
+            error_message = "❌ Error: No userID found for this username."
+            return render_template('error.html', message=error_message)
 
         userID = userID_result[0][0]
-        print(f"✅ Retrieved userID: {userID}")
 
-        # Get orgIDs from userID
         sql_query = userTask.select_orgIDs_by_userID_query()
         orgIDs = userTask.execute_select_query_vals(connection, sql_query, [userID])
-
         if not orgIDs:
-            print("❌ Error: No organization IDs found for this user")
-            return None
-
-        print(f"✅ Retrieved orgIDs: {orgIDs}")
+            error_message = "❌ Error: No organization IDs found for this user."
+            return render_template('error.html', message=error_message)
 
         formatted_apps = []
         for org_tuple in orgIDs:
             orgID = org_tuple[0]
-            print(f"🔹 Processing applications for OrgID: {orgID}")
 
             sql_query = userTask.select_past_applications_by_orgID_query()
             past_apps = userTask.execute_select_query_vals(connection, sql_query, [orgID]) or []
@@ -117,44 +135,22 @@ def createAppJson(username, key):
 
             appList = past_apps + current_apps + future_apps
 
-            print(f"✅ Retrieved {len(appList)} applications for OrgID: {orgID}")
-
-            # Process each application
             for app in appList:
                 try:
-                    farmName = app[0]
-                    fieldName = app[1]
-                    appID = app[2]
-                    appType = app[3]
-                    startTime = app[4]
-                    endTime = app[5]
-
+                    farmName, fieldName, appID, appType, startTime, endTime = app[0], app[1], app[2], app[3], app[4], app[5]
+                    
                     sql_query_rei = userTask.select_REI_time_from_application_query()
                     reitime = userTask.execute_select_query_vals(connection, sql_query_rei, [appID])[0][0]
-
-                    print("REI:",reitime)
-
                     new_date = endTime + timedelta(hours=int(reitime))
-                    expires_on_formatted = new_date.strftime('%B %d, %Y at %I:%M:%S %p')
-                    reiExp = expires_on_formatted
+                    reiExp = new_date.strftime('%B %d, %Y at %I:%M:%S %p')
 
                     sql_query = userTask.select_app_geometry_by_appID_query()
                     geometry_result = userTask.execute_select_query_vals(connection, sql_query, [appID])
-
-
-
-
-                    appTimeType = app[10]
-
-                    print("geometry_result:",geometry_result)
-
-
-
                     if not geometry_result:
-                        print(f"❌ Error: No geometry found for AppID {appID}")
-                        continue
+                        error_message = f"❌ Error: No geometry found for AppID {appID}."
+                        return render_template('error.html', message=error_message)
 
-                    geometry = eval(geometry_result[0][0])  # Convert string to Python object
+                    geometry = eval(geometry_result[0][0])
 
                     sql_query = userTask.select_tank_mix_name_by_tank_mixID_query()
                     tankMixName = userTask.execute_select_query_vals(connection, sql_query, [app[9]])[0][0]
@@ -164,6 +160,8 @@ def createAppJson(username, key):
 
                     sql_query = userTask.select_tank_mix_products_by_tank_mixID_query()
                     products = userTask.execute_select_query_vals(connection, sql_query, [app[9]])
+
+                    appTimeType = app[10]
 
                     appProperties = {
                         "FarmName": farmName,
@@ -188,38 +186,33 @@ def createAppJson(username, key):
                     formatted_apps.append(appInstance)
 
                 except Exception as e:
-                    print(f"❌ Exception processing AppID {appID}: {e}")
-                    continue
+                    error_message = f"❌ Exception processing AppID {appID}: {e}"
+                    return render_template('error.html', message=error_message)
 
-        # Create JSON structure
+        # Create JSON file
         jsonFilePath = 'public_html/cgi-bin/misc/json/'
         jsonFileName = f'pestappsJSON_{key}.js'
         jsonFile = os.path.join(jsonFilePath, jsonFileName)
 
         if not os.path.exists(jsonFilePath):
-            print(f"⚠️ Directory '{jsonFilePath}' does not exist. Creating it now...")
-            os.makedirs(jsonFilePath, exist_ok=True)  # Creates directory if it does not exist
+            os.makedirs(jsonFilePath, exist_ok=True)
 
         try:
-
             with open(jsonFile, "w") as jsonFileW:
                 jsonData = json.dumps({'type': 'FeatureCollection', 'features': formatted_apps}, indent=2)
                 jsonFileW.write(jsonData)
-            # with open(jsonFile, "w") as jsonFileW:
-            #     jsonData = json.dumps({'type': 'FeatureCollection', 'features': []})  # Dummy data for now
-            #     jsonFileW.write(jsonData)
-
-            print(f"✅ JSON File Created Successfully: {jsonFile}")
             return jsonFileName
         
         except Exception as e:
-            print(f"❌ Exception in createAppJson: {e}")
-            return None
+            error_message = f"❌ Exception writing JSON file: {e}"
+            return render_template('error.html', message=error_message)
 
     except Exception as e:
-        logging.exception(e)
-        print(f"❌ Exception in createAppJson: {e}")
-        return None
+        error_message = f"❌ General Exception in createAppJson: {e}"
+        return render_template('error.html', message=error_message)
+
+
+
 
 
 
@@ -846,50 +839,52 @@ def checkEditAccess():
 
 
 
-
-
-
-
-
-
-
 @app.route('/userMain')
 def userMain():
     if 'username' not in session:
-        print("❌ Error: User not logged in, redirecting to login page")
-        return redirect(url_for('login'))
+        error_message = "❌ Error: User not logged in. Please log in first."
+        return render_template('error.html', message=error_message)  # 🔥
 
     username = session['username']
-    print(f"✅ User '{username}' logged in successfully")
 
     key = random.randint(1000, 9999)
     jsonFile = createAppJson(username, key)
 
-    if jsonFile:
-        print(f"✅ Storing JSON file in session: {jsonFile}")
-        session['jsonFile'] = jsonFile  # ✅ Ensure JSON filename is stored in session
-    else:
-        print("❌ Error: JSON file was not created")
-        session['jsonFile'] = None  # Prevent 'None' error
+    if not jsonFile:
+        error_message = "❌ Error: JSON file was not created."
+        return render_template('error.html', message=error_message)  # 🔥
 
-    connection = userTask.create_db_connection()
-    sql_query = userTask.select_userID_by_username_query()
-    userID = userTask.execute_select_query_vals(connection,sql_query,[username])[0][0]
-    sql_query = userTask.select_organization_owner_by_userID_query()
-    orgowner = userTask.execute_select_query_vals(connection,sql_query,[userID])[0][0]
+    session['jsonFile'] = jsonFile
 
-    return render_template('user_Main.html', orgowner=orgowner)
-    #return render_template('user_Main.html', username=username)
+    try:
+        connection = userTask.create_db_connection()
+        if not connection:
+            error_message = "❌ Error: Database connection failed."
+            return render_template('error.html', message=error_message)  # 🔥
 
+        sql_query = userTask.select_userID_by_username_query()
+        userID_result = userTask.execute_select_query_vals(connection, sql_query, [username])
+        if not userID_result:
+            error_message = "❌ Error: User ID not found for the username."
+            return render_template('error.html', message=error_message)  # 🔥
 
+        userID = userID_result[0][0]
 
+        sql_query = userTask.select_organization_owner_by_userID_query()
+        orgowner_result = userTask.execute_select_query_vals(connection, sql_query, [userID])
+        if not orgowner_result:
+            error_message = "❌ Error: Organization owner not found for the user."
+            return render_template('error.html', message=error_message)  # 🔥
 
+        orgowner = orgowner_result[0][0]
 
+        connection.close()
 
+        return render_template('user_Main.html', orgowner=orgowner)
 
-
-
-
+    except Exception as e:
+        error_message = f"❌ Unexpected error: {e}"
+        return render_template('error.html', message=error_message)  # 🔥
 
 
 
@@ -1024,72 +1019,99 @@ def getAllProductNames():
 #   ************************************************************
 #   *** USER MAIN POST/GET PROCEDURE ***
 #   ************************************************************
+@app.route('/jdaccess/', methods=['GET'])
+def jd_access():
+    username = request.args.get('username', 'Unknown')
+    return f"John Deere Access for {username}"
+
+
 @app.route('/userMain/dataLinkConnect', methods=['POST', 'GET'])
 def userMain_DataLink():
-    debugFile = nt_debug_write_file("datalinkConnect_Exception")
+    if request.method == 'POST':
+        acctType = request.form.get('accountType')
+        username = session['username']
 
-    import urllib.parse
+        if acctType == '2':  # John Deere Operations Center
+            #redirect_Url = f'https://johndeere.spray-safely.com/' + username
+            redirect_Url = 'http://127.0.0.1:5000/jdaccess/?username=' + username
+            #redirect_Url = 'http://jd-test.spray-safely.test:5000/jdaccess/?username=' + username
+            #redirect_Url = 'https://johndeere.spray-safely.com/' + username            
+            #redirect_Url = 'https://johndeere.spray-safely.com/'
+            return redirect(redirect_Url, code=302)
 
-    # Debug Start #
-    if debug == True:
-        file = nt_debug_write_file("userMain_Post")  # nt
-        file.write("start of procedure:" + "\n")  # nt
-    # Debug End #
 
-    try:
-        if request.method == 'POST':
-            # Debug Start #
-            if debug == True:
-                file.write("start of post:" + "\n")  # nt
-            # Debug End #
 
-            acctType = request.form.get('accountType')
 
-            # Debug Start #
-            if debug == True:
-                file.write("acctType: " + repr(acctType) + "\n")  # nt
-            # Debug End #
+# @app.route('/userMain/dataLinkConnect', methods=['POST', 'GET'])
+# def userMain_DataLink():
+#     debugFile = nt_debug_write_file("datalinkConnect_Exception")
 
-            #username = request.form['usernameLbl']
-            #username = request.cookies.get('username')
-            username = session['username']
+#     import urllib.parse
 
-            # Debug Start #
-            if debug == True:
-                file.write("username: " + repr(username) + "\n")  # nt
-            # Debug End #
+#     # Debug Start #
+#     if debug == True:
+#         file = nt_debug_write_file("userMain_Post")  # nt
+#         file.write("start of procedure:" + "\n")  # nt
+#     # Debug End #
 
-            if acctType == '2':  # john deere operations center
-                #redirect_Url = 'http://127.0.0.1:5000/jdaccess/?username=' + username
-                #redirect_Url = 'http://jd-test.spray-safely.test:5000/jdaccess/?username=' + username
-                redirect_Url = 'https://johndeere.spray-safely.com/' + username
-                #redirect_Url = 'https://johndeere.spray-safely.com/'
+#     try:
+#         if request.method == 'POST':
+#             # Debug Start #
+#             if debug == True:
+#                 file.write("start of post:" + "\n")  # nt
+#             # Debug End #
 
-                # Debug Start #
-                if debug == True:
-                    file.write("redirect Url: " +
-                               repr(redirect_Url) + "\n")  # nt
-                # Debug End #
+#             acctType = request.form.get('accountType')
 
-                #response = make_response(redirect(redirect_Url))
-                #response.set_cookie('username', username)
-                # return response
-                return redirect(redirect_Url, code=302)
-            # Debug Start #
-            if debug == True:
-                file.close()
-            # Debug End #
+#             # Debug Start #
+#             if debug == True:
+#                 file.write("acctType: " + repr(acctType) + "\n")  # nt
+#             # Debug End #
 
-    except Exception as e:
-        logging.exception(e)
-        # Debug Start #
-        if debug == True:
-            debugFile.write("error - " + repr(e) + "\n")
-            debugFile.close()
-        # Debug End #
+#             #username = request.form['usernameLbl']
+#             #username = request.cookies.get('username')
+#             username = session['username']
+
+#             # Debug Start #
+#             if debug == True:
+#                 file.write("username: " + repr(username) + "\n")  # nt
+#             # Debug End #
+
+#             if acctType == '2':  # john deere operations center
+#                 redirect_Url = 'http://127.0.0.1:5000/jdaccess/?username=' + username
+#                 #redirect_Url = 'http://jd-test.spray-safely.test:5000/jdaccess/?username=' + username
+#                 #redirect_Url = 'https://johndeere.spray-safely.com/' + username
+#                 #redirect_Url = 'https://johndeere.spray-safely.com/'
+
+#                 # Debug Start #
+#                 if debug == True:
+#                     file.write("redirect Url: " +
+#                                repr(redirect_Url) + "\n")  # nt
+#                 # Debug End #
+
+#                 #response = make_response(redirect(redirect_Url))
+#                 #response.set_cookie('username', username)
+#                 # return response
+#                 return redirect(redirect_Url, code=302)
+#             # Debug Start #
+#             if debug == True:
+#                 file.close()
+#             # Debug End #
+
+#     except Exception as e:
+#         logging.exception(e)
+#         # Debug Start #
+#         if debug == True:
+#             debugFile.write("error - " + repr(e) + "\n")
+#             debugFile.close()
+#         # Debug End #
 
         
  
+
+
+
+
 
 
 
@@ -1098,14 +1120,14 @@ def getAppJson():
     jsonFileName = session.get('jsonFile')
 
     if not jsonFileName:
-        print("❌ Error: No JSON file found in session")
-        return jsonify({"error": "No JSON file found"}), 400
+        error_message = "❌ Error: No JSON file found in session."
+        return render_template('error.html', message=error_message)  # 🌟
 
     jsonDir = os.path.join("public_html/cgi-bin/misc/json/", jsonFileName)
 
     if not os.path.exists(jsonDir):
-        print(f"❌ Error: JSON file does not exist: {jsonDir}")
-        return jsonify({"error": "JSON file does not exist"}), 400
+        error_message = f"❌ Error: JSON file does not exist: {jsonDir}"
+        return render_template('error.html', message=error_message)  # 🌟
 
     try:
         with open(jsonDir, "r") as fileJSON:
@@ -1113,11 +1135,8 @@ def getAppJson():
             return jsonify(jsonData)
 
     except Exception as e:
-        print(f"❌ Error reading JSON file: {e}")
-        return jsonify({"error": "Failed to read JSON"}), 500
-
-
-
+        error_message = f"❌ Error reading JSON file: {e}"
+        return render_template('error.html', message=error_message)  # 🌟
 
 
 
@@ -1266,7 +1285,7 @@ def inviteUser():
         
 
             if not connection or not connection.is_connected():
-                print("⚠️ Connection lost. Reconnecting...")
+                #print("⚠️ Connection lost. Reconnecting...")
                 connection = userTask.create_db_connection()
 
             cursor = connection.cursor()
@@ -1281,14 +1300,14 @@ def inviteUser():
 
             if newaccuserid_result:
                 newaccuserid = newaccuserid_result[0]  # Extract the `User_ID`
-                print(f"✅ New User ID Retrieved: {newaccuserid}")
+                #print(f"✅ New User ID Retrieved: {newaccuserid}")
             else:
-                print("❌ Error: User ID not found for the given email.")
+                #print("❌ Error: User ID not found for the given email.")
                 return render_template("invite.html", message="❌ User not found in database.")
             
 
             if not connection or not connection.is_connected():
-                print("⚠️ Connection lost. Reconnecting...")
+                #print("⚠️ Connection lost. Reconnecting...")
                 connection = userTask.create_db_connection()
 
             cursor = connection.cursor()
@@ -1307,9 +1326,9 @@ def inviteUser():
 
             if orgID_result:
                 orgID = orgID_result[0]
-                print(f"✅ Organization ID Retrieved: {orgID}")
+                #print(f"✅ Organization ID Retrieved: {orgID}")
             else:
-                print("❌ Organization not found. Check the organization name.")
+                #print("❌ Organization not found. Check the organization name.")
                 return render_template("invite.html", message="❌ Organization not found.")
                     
             
